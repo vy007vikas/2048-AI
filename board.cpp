@@ -19,7 +19,6 @@ class Move{
 class Board{
 	private:
 		int arr[N][N];   //to store the basic grid of 2048
-		vector < pair <int,int> > emptySet;
 	public:
 		int currScore;
 		Board(){
@@ -27,17 +26,20 @@ class Board{
 			for(int a=0;a<N;a++){
 				for(int b=0;b<N;b++){
 					arr[a][b] = 0;
-					emptySet.push_back(make_pair(a,b));
 				}
 			}
 			currScore = 0;
 		}
 		void genNext(){
-			//to generate a random number in the list
-			int len = emptySet.size();
-			int temp = rand()%len;
-			arr[emptySet[temp].first][emptySet[temp].second] = (rand()%2+1)*2;
-
+			vector < pair <int,int> >	allPoss;
+			for(int a=0;a<N;a++){
+				for(int b=0;b<N;b++){
+					if(arr[a][b]==0)	allPoss.push_back(make_pair(a,b));
+				}
+			}
+			int len = allPoss.size();
+			len = rand()%len;
+			arr[allPoss[len].first][allPoss[len].second] = (rand()%2+1)*2;
 		}
 		/* -------- move functions to change board according to the game ------- */
 		void moveLeft(){

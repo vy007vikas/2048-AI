@@ -14,66 +14,82 @@ stringstream ss;
 using namespace std;
 
 class game{
-    public:
-        Board board;
-        game(){
-            //initialize a game
+	public:
+		Board board;
+		game(){
+			//initialize a game
 
-        }
-        void showInit(){
-            //show the initial menu for the game
-            cout<<"-------------------------<<  2048 AI  >>-------------------------";
-            cout<<endl<<endl;
-            cout<<"A simple terminal implementation of 2048 to auto-solve the game using minimax and alpha-beta pruning."<<endl;
-            cout<<"Any contributions are welcome."<<endl;
-            cout<<"To start the game just hit enter."<<endl;
-            char ch;
-            scanf("%c", &ch);
-        }
-        void displayBoard(){
-            //to display the game board
-            cout<<"-------------------------<<  2048 AI  >>-------------------------";
-            cout<<endl<<"                      <<< SCORE: "<<board.currScore<<"  >>>";
-            cout<<endl<<endl;
-            for(int a=0;a<N;a++){
-                for(int b=0;b<N;b++){
-                    if(b==0)    cout<<"                        ";
-                    cout<<board.getVal(a,b)<<"    ";
-                }
-                cout<<endl;
-            }
-            cout<<endl<<endl;
-        }
-        void clearScreen(){
-            //to clear the screen after one move
-            usleep(DELAY);
-            system("clear");
-        }
-        void dispFinalScore(){
-            cout<<"-------------------------<<  2048 AI  >>-------------------------";
-            cout<<endl<<endl;
-            cout<<"------------------------<<  GAME OVER  >>-------------------------";
-            cout<<endl<<endl;
-            cout<<"The final score is: "<<board.currScore<<endl;
-        }
-        void playGame(){
-            displayBoard();
-            clearScreen();
-            board.genNext();
-            int x = board.makeMove();
-            if(x==101){
-                dispFinalScore();
-                return;
-            }
-            playGame();
-        }
+		}
+		string set_color(int number){
+			stringstream sss;
+			sss<<"\033[";
+			if(number==2)	sss<<"0";
+			else {
+				if (number==16 || number==128)		sss<<29+5;
+				else if (number==8 || number==32)		sss<<29+3;
+				else if (number==4 || number==256)		sss<<29+4;
+				else if (number==64 || number==512)		sss<<29+7;
+				else		sss<<29+2;
+			}
+			sss<<"m";
+			return sss.str();
+		}
+		void showInit(){
+			//show the initial menu for the game
+			ss<<"-------------------------<<  2048 AI  >>-------------------------";
+			ss<<endl<<endl;
+			ss<<"A simple terminal implementation of 2048 to auto-solve the game using minimax and alpha-beta pruning."<<endl;
+			ss<<"Any contributions are welcome."<<endl;
+			ss<<"To start the game just hit enter."<<endl;
+			cout<<ss.str();
+			char ch;
+			scanf("%c", &ch);
+		}
+		void displayBoard(){
+			//to display the game board
+			cout<<"-------------------------<<  2048 AI  >>-------------------------";
+			cout<<endl<<"                      <<< SCORE: "<<board.currScore<<"  >>>";
+			cout<<endl<<endl;
+			for(int a=0;a<N;a++){
+				for(int b=0;b<N;b++){
+					if(b==0)    cout<<"                        ";
+					cout<<set_color(board.getVal(a,b))<<board.getVal(a,b)<<"    ";
+				}
+				cout<<endl;
+			}
+			cout<<endl<<endl;
+		}
+		void clearScreen(){
+			//to clear the screen after one move
+			//usleep(DELAY);
+			system("clear");
+		}
+		void dispFinalScore(){
+			ss<<"-------------------------<<  2048 AI  >>-------------------------";
+			ss<<endl<<endl;
+			ss<<"------------------------<<  GAME OVER  >>-------------------------";
+			ss<<endl<<endl;
+			ss<<"The final score is: "<<board.currScore<<endl;
+			cout<<ss.str();
+		}
+		void playGame(){
+			clearScreen();
+			board.genNext();
+			displayBoard();
+			int x = board.makeMove();
+			if(x==101){
+				dispFinalScore();
+				return;
+			}
+			playGame();
+		}
 };
 
 int main(){
-    game myGame;
-    myGame.showInit();
-    myGame.playGame();
-    return 0;
+	game myGame;
+	myGame.showInit();
+	myGame.playGame();
+	return 0;
 }
 
 #endif
