@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 const int N = 4;
-const int DELAY = 20000;
+const int DELAY = 5000000;
 
 #include "board.cpp"
 #include "algo.cpp"
