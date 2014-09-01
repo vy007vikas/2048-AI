@@ -24,7 +24,8 @@ class Board{
 		int makePlayerMove();
 		int makeCompMove();
 		void CloneBoard(Board& tbc);
-		int countProfit(int x);
+		vector < pair <int,int> > findAllPossMoves();
+		bool isGameOver();
 };
 
 class Move{
@@ -193,10 +194,27 @@ inline void Board::CloneBoard(Board& tbc){
 		}
 	}
 }
-inline int Board::countProfit(int x){
-
+inline vector < pair <int,int> > Board::findAllPossMoves(){
+	vector < pair <int,int> > answer;
+	for(int a=0;a<N;a++){
+		for(int b=0;b<N;b++){
+			if(arr[a][b]==0)		answer.push_back(make_pair(a,b));
+		}
+	}
+	return answer;
 }
-
+inline bool Board::isGameOver(){
+	for(int a=0;a<N;a++){
+		for(int b=0;b<N;b++){
+			if(arr[a][b]==0)		return false;
+			if(a-1>=0)		if(arr[a-1][b]==arr[a][b])		return false;
+			if(a+1<N)		if(arr[a+1][b]==arr[a][b])		return false;
+			if(b-1>=0)		if(arr[a][b-1]==arr[a][b])		return false;
+			if(b+1<N)		if(arr[a][b+1]==arr[a][b])		return false;
+		}
+	}
+	return true;
+}
 /*
 
 	CLASS BOARD FUCNTIONS -------------------------- END -----------------------------------------------
