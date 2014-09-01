@@ -9,4 +9,8 @@ using namespace std;
 
 //here we do alpha-beta pruning to find out which move should be best for the computer
 
+int alphabeta(int depth,Board &board,int alpha,int beta,Move *move){
+
+}
+
 #endif

@@ -53,7 +53,7 @@ class game{
 			for(int a=0;a<N;a++){
 				for(int b=0;b<N;b++){
 					if(b==0)    cout<<"                        ";
-					cout<<set_color(board.getVal(a,b))<<board.getVal(a,b)<<"    ";
+					cout<<set_color(board.arr[a][b])<<board.arr[a][b]<<"    ";
 				}
 				cout<<endl;
 			}
@@ -76,7 +76,7 @@ class game{
 			clearScreen();
 			board.genNext();
 			displayBoard();
-			int x = board.makeMove();
+			int x = board.makePlayerMove();
 			if(x==101){
 				dispFinalScore();
 				return;
