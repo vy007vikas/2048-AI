@@ -3,14 +3,16 @@
 
 #include <bits/stdc++.h>
 
-#include "runner.cpp"
-
 using namespace std;
+
+#include "runner.cpp"
 
 class Board{
 	public:
 		int arr[N][N];   //to store the basic grid of 2048
-		int currScore;
+		int currScore;         //  board game score to be displayed on the screen
+		int heuristicScore;    //  heuristic score of the board
+		int noOfEmptyCells;
 		Board(){
 			//set the initial board
 			for(int a=0;a<N;a++){
@@ -19,6 +21,8 @@ class Board{
 				}
 			}
 			currScore = 0;
+			heuristicScore = 0;
+			noOfEmptyCells = N*N;
 		}
 		bool genNext();
 		int makePlayerMove();
@@ -26,6 +30,7 @@ class Board{
 		void CloneBoard(Board& tbc);
 		vector < pair <int,int> > findAllPossMoves();
 		bool isGameOver();
+		bool isEqual(Board& board);
 };
 
 class Move{
@@ -46,6 +51,8 @@ class Move{
 		void moveDown(Board& tbc);
 		void doMove(Board& tbc);
 };
+
+#include "algo.cpp"
 
 /*
 
@@ -181,9 +188,20 @@ inline int Board::makePlayerMove(){
 	Move playerMove(ch);
 	playerMove.doMove(*this);
 	currScore += playerMove.deltaScore;
+	return 1;
 }
 inline int Board::makeCompMove(){
-
+	pair <int,int> x = alphabeta(LOOK_AHEAD,*this,-INF,INF,1);
+	cout<<" -- "<<x.first<<" "<<x.second<<endl;
+	char ch;
+	if(x.first==0)	return -1;
+	else if(x.first==1)	ch = 'a';
+	else if(x.first==2)	ch = 'w';
+	else if(x.first==3)	ch = 'd';
+	else if(x.first==3)	ch = 's';
+	Move ai_move(ch);
+	ai_move.doMove(*this);
+	return 1;
 }
 //------------ HELPER FUNCTIONS TO FIND BEST MOVE ------//
 inline void Board::CloneBoard(Board& tbc){
@@ -204,9 +222,17 @@ inline vector < pair <int,int> > Board::findAllPossMoves(){
 	return answer;
 }
 inline bool Board::isGameOver(){
+	noOfEmptyCells = 0;
 	for(int a=0;a<N;a++){
 		for(int b=0;b<N;b++){
-			if(arr[a][b]==0)		return false;
+			if(arr[a][b]==0){
+				noOfEmptyCells = 0;
+			}
+		}
+	}
+	if(noOfEmptyCells)		return true;
+	for(int a=0;a<N;a++){
+		for(int b=0;b<N;b++){
 			if(a-1>=0)		if(arr[a-1][b]==arr[a][b])		return false;
 			if(a+1<N)		if(arr[a+1][b]==arr[a][b])		return false;
 			if(b-1>=0)		if(arr[a][b-1]==arr[a][b])		return false;
@@ -215,8 +241,15 @@ inline bool Board::isGameOver(){
 	}
 	return true;
 }
+inline bool Board::isEqual(Board& board){
+	for(int a=0;a<N;a++){
+		for(int b=0;b<N;b++){
+			if(arr[a][b] != board.arr[a][b])		return false;
+		}
+	}
+	return true;
+}
 /*
-
 	CLASS BOARD FUCNTIONS -------------------------- END -----------------------------------------------
 */
 

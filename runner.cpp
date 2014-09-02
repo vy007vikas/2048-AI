@@ -5,7 +5,9 @@
 #include <unistd.h>
 
 const int N = 4;
+const int LOOK_AHEAD = 4;
 const int DELAY = 5000000;
+const int INF = 99999999;
 
 #include "board.cpp"
 #include "algo.cpp"
@@ -61,8 +63,8 @@ class game{
 		}
 		void clearScreen(){
 			//to clear the screen after one move
-			//usleep(DELAY);
-			system("clear");
+			usleep(DELAY);
+			//system("clear");
 		}
 		void dispFinalScore(){
 			ss<<"-------------------------<<  2048 AI  >>-------------------------";
@@ -76,8 +78,8 @@ class game{
 			clearScreen();
 			board.genNext();
 			displayBoard();
-			int x = board.makePlayerMove();
-			if(x==101){
+			int x = board.makeCompMove();
+			if(x==-1){
 				dispFinalScore();
 				return;
 			}
